@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="nome"
+            type="String" />
+        <variable
+            name="click"
+            type="net.yan.kotlin.promoters.venda.optionOne.adapter.ClienteListener" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> click.onClick(nome)}">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            android:layout_margin="@dimen/LayoutPadding_16dp"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/LayoutPadding_16dp"
+                android:paddingBottom="@dimen/LayoutPadding_8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imagem"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="@dimen/margins"
+                    android:layout_marginEnd="@dimen/margins"
+                    android:src="@drawable/promo2" />
+
+                <TextView
+                    android:id="@+id/texto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Os artigos de testes precisam estar atualizados e com valores bem definidos de classes e objetos."
+                    android:maxLines="2"
+                    style="?attr/textAppearanceBody1"
+                    android:layout_marginTop="@dimen/LayoutPadding_16dp"
+                    android:layout_marginEnd="@dimen/margins"
+                    android:layout_marginStart="@dimen/margins"
+                    app:itens="@{nome}"
+                    />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</layout>

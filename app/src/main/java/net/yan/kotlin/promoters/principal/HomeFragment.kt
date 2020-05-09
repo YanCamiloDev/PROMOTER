@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
 
         viewModel.newPhoto.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToVendaFragment())
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToOptionOneFragment())
                 viewModel.addLocalAndVendaClose()
             }
 

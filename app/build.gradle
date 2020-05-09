@@ -40,6 +40,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -54,6 +55,7 @@ dependencies {
     /*Dependências para abas*/
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    implementation 'com.android.support:recyclerview-selection:28.0.0'
 
     /*Dependência para arredondamento de imagens*/
     implementation 'de.hdodenhof:circleimageview:3.1.0'
