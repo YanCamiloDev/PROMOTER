@@ -16,7 +16,7 @@ private val ITEM_VIEW_TYPE_HEADER = 0
 private val ITEM_VIEW_TYPE_ITEM = 1
 
 class Adapter(val clickListener: ClienteListener) : ListAdapter<DataItem,
-        RecyclerView.ViewHolder>(SleepNightDiffCallback()) {
+        RecyclerView.ViewHolder>(ClientCallBack()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -79,7 +79,7 @@ class Adapter(val clickListener: ClienteListener) : ListAdapter<DataItem,
  * Used by ListAdapter to calculate the minumum number of changes between and old list and a new
  * list that's been passed to `submitList`.
  */
-class SleepNightDiffCallback : DiffUtil.ItemCallback<DataItem>() {
+class ClientCallBack : DiffUtil.ItemCallback<DataItem>() {
     override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem.id == newItem.id
     }
@@ -96,9 +96,6 @@ class ClienteListener(val clickListener: (sleepId: String) -> Unit) {
 sealed class DataItem {
     data class ClienteItem(val nome: String): DataItem() {
         override val id = nome
-    }
-    object Header: DataItem() {
-        override val id: String = ""
     }
 
     abstract val id: String
