@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
             false
         )
         val firebase = FirebaseHelper()
-        val viewModelFactory = HomeViewModelFactory(firebase, binding)
+        val viewModelFactory = HomeViewModelFactory(firebase, binding, resources)
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
 
         viewModel.estaLogado.observe(viewLifecycleOwner, Observer {

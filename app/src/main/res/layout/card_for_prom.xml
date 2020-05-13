@@ -4,27 +4,29 @@
 
     <data>
         <variable
-            name="nome"
-            type="String" />
+            name="promoter"
+            type="net.yan.kotlin.promoters.model.Promoter" />
+
         <variable
             name="click"
-            type="net.yan.kotlin.promoters.venda.optionOne.adapter.ClienteListener" />
+            type="net.yan.kotlin.promoters.venda.Clique" />
     </data>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> click.onClick(nome)}">
+        >
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardV"
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="4dp"
             android:layout_margin="@dimen/LayoutPadding_16dp"
-            android:checkable="true"
             android:clickable="true"
+            android:checkable="true"
+            android:onClick="@{() -> click.onClick(promoter)}"
             android:focusable="true">
 
             <LinearLayout
@@ -32,18 +34,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="@dimen/LayoutPadding_16dp"
-                android:paddingBottom="@dimen/LayoutPadding_8dp">
+                android:paddingBottom="@dimen/LayoutPadding_8dp"
+                >
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imagem"
+                    android:id="@+id/imagg"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginStart="@dimen/margins"
                     android:layout_marginEnd="@dimen/margins"
-                    android:src="@drawable/promo2" />
+                    app:srcCompat="@drawable/ic_account_box_black_24dp" />
 
                 <TextView
-                    android:id="@+id/texto"
+                    android:id="@+id/textooo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Os artigos de testes precisam estar atualizados e com valores bem definidos de classes e objetos."
@@ -52,7 +55,7 @@
                     android:layout_marginTop="@dimen/LayoutPadding_16dp"
                     android:layout_marginEnd="@dimen/margins"
                     android:layout_marginStart="@dimen/margins"
-                    app:itens="@{nome}"
+                    app:itens="@{promoter.nome}"
                     />
             </LinearLayout>
 

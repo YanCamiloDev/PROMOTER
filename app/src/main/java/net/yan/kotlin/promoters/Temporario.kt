@@ -4,7 +4,40 @@ package net.yan.kotlin.promoters
 
 
 
+        val lista = initializeListPopupMenu(binding.clientes)
 
+    @SuppressLint("ResourceType")
+    private fun initializeListPopupMenu(v: View): ListPopupWindow? {
+        val listPopupWindow = context?.let {
+            ListPopupWindow(
+                it,
+                null,
+                R.attr.listPopupWindowStyle
+            )
+        }
+        val adapter = context?.let {
+            ArrayAdapter(
+                it,
+                R.layout.chip,
+                resources.getStringArray(R.array.promotores)
+            )
+        }
+        listPopupWindow?.setAdapter(adapter)
+        listPopupWindow?.anchorView = v
+        listPopupWindow?.setOnItemClickListener { parent, view, position, id ->
+
+            listPopupWindow.dismiss()
+        }
+        return listPopupWindow
+    }
+
+
+         val chip = Chip(binding.scrollGroup.context)
+            chip.text = text
+            chip.isCheckable = true
+            chip.isClickable = true
+
+            binding.scrollGroup.addView(chip)
 
     fun gravarFoto(bitmap: Bitmap, id: String): String {
         var uri = ""

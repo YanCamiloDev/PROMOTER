@@ -29,7 +29,7 @@ class ContinuacaoViewModel(
 ) : ViewModel() {
 
     val job = Job()
-    val uiScope = CoroutineScope(Dispatchers.Default + job)
+    val uiScope = CoroutineScope(Dispatchers.IO + job)
 
     private val _isCadastrado = MutableLiveData<Boolean>()
     val isCadastrado: LiveData<Boolean>
@@ -41,6 +41,7 @@ class ContinuacaoViewModel(
         get() = _error
 
     fun cadastrar(email: String, senha: String, nome: String, foto: Bitmap) {
+
         try {
             val res = dataSource.auth?.createUserWithEmailAndPassword(email, senha)
                 ?.addOnCompleteListener {

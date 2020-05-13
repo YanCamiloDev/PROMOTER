@@ -2,6 +2,9 @@ package net.yan.kotlin.promoters.venda.optionOne.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,23 +12,30 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.yan.kotlin.promoters.databinding.CardBinding
+import net.yan.kotlin.promoters.databinding.CardOneBinding
 import net.yan.kotlin.promoters.databinding.FragmentOptionOneBinding
+import net.yan.kotlin.promoters.databinding.FragmentVendaBinding
+import net.yan.kotlin.promoters.model.Cliente
+import java.util.*
 
-private val ITEM_VIEW_TYPE_HEADER = 0
+
 private val ITEM_VIEW_TYPE_ITEM = 1
 
 class Adapter(val clickListener: ClienteListener) : ListAdapter<DataItem,
-        RecyclerView.ViewHolder>(ClientCallBack()) {
+        RecyclerView.ViewHolder>(ClientCallBack()), Filterable {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
+    private var itens: List<DataItem.ClienteItem>? = null
 
-    fun addHeaderAndSubmitList(list: Array<String>?) {
+
+
+    fun addHeaderAndSubmitList(list: Array<Cliente
+            >?) {
         adapterScope.launch {
-            val items = list?.map { DataItem.ClienteItem(it) }
+            itens = list?.map { DataItem.ClienteItem(it) }
 
             withContext(Dispatchers.Main) {
-                submitList(items)
+                submitList(itens)
             }
         }
     }
@@ -34,7 +44,7 @@ class Adapter(val clickListener: ClienteListener) : ListAdapter<DataItem,
         when (holder) {
             is ViewHolder -> {
                 val nightItem = getItem(position) as DataItem.ClienteItem
-                holder.bind(clickListener, nightItem.nome)
+                holder.bind(clickListener, nightItem.cliente)
             }
         }
     }
@@ -53,35 +63,60 @@ class Adapter(val clickListener: ClienteListener) : ListAdapter<DataItem,
         }!!
     }
 
-    class ViewHolder private constructor(val binding: CardBinding)
-        : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(val binding: CardOneBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(clickListener: ClienteListener, nome: String) {
+        fun bind(clickListener: ClienteListener, nome: Cliente) {
             binding.click = clickListener
-            binding.nome = nome
+            binding.cliente = nome
             binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = CardBinding.inflate(layoutInflater, parent, false)
+                val binding = CardOneBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }
         }
     }
+
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString().toLowerCase(Locale.ROOT).trim()
+                var lista = mutableListOf<DataItem.ClienteItem>()
+                if (charSearch.isEmpty()) {
+                    lista.addAll(itens!!)
+                } else {
+                    for (row in itens!!) {
+                        if (row.cliente.endereco.toLowerCase(Locale.ROOT)
+                                .contains(charSearch.toLowerCase(Locale.ROOT))
+                        ) {
+                            lista.add(row)
+                        }
+                    }
+                }
+                val filterResults = FilterResults()
+                filterResults.values = lista
+                return filterResults
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                submitList(results?.values as MutableList<DataItem>?)
+            }
+
+        }
+    }
 }
 
-/**
- * Callback for calculating the diff between two non-null items in a list.
- *
- * Used by ListAdapter to calculate the minumum number of changes between and old list and a new
- * list that's been passed to `submitList`.
- */
+
 class ClientCallBack : DiffUtil.ItemCallback<DataItem>() {
     override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.cliente == newItem.cliente
     }
 
     override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
@@ -89,14 +124,14 @@ class ClientCallBack : DiffUtil.ItemCallback<DataItem>() {
     }
 }
 
-class ClienteListener(val clickListener: (sleepId: String) -> Unit) {
-    fun onClick(nome: String) = clickListener(nome)
+class ClienteListener(val clickListener: (sleepId: Cliente) -> Unit) {
+    fun onClick(client: Cliente) = clickListener(client)
 }
 
 sealed class DataItem {
-    data class ClienteItem(val nome: String): DataItem() {
-        override val id = nome
+    data class ClienteItem(val cli: Cliente) : DataItem() {
+        override val cliente = cli
     }
 
-    abstract val id: String
+    abstract val cliente: Cliente
 }

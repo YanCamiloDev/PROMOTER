@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import net.yan.kotlin.promoters.R
 import net.yan.kotlin.promoters.databinding.FragmentOptionOneBinding
@@ -35,12 +39,34 @@ class OptionOneFragment : Fragment() {
             viewModel.selecionarNome(nome)
         })
 
+        binding.search.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+
+        })
+
+        viewModel.nome.observe(viewLifecycleOwner, Observer {
+            if (it != null){
+                findNavController().navigate(OptionOneFragmentDirections.actionOptionOneFragmentToOptionTwoFragment(it.id))
+                viewModel.selecionarNomeExit()
+            }
+
+        })
         viewModel.nomesLista.observe(viewLifecycleOwner, Observer {
             it.let {
-                Log.i("NOMES", it.get(0))
                 adapter.addHeaderAndSubmitList(it)
             }
         })
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         binding.recycler.adapter = adapter
 
         return binding.root

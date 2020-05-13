@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="cidade"
+            type="String" />
+        <variable
+            name="cliente"
+            type="String" />
+        <variable
+            name="promotor"
+            type="net.yan.kotlin.promoters.model.Promoter" />
+        <variable
+            name="foto"
+            type="android.graphics.Bitmap" />
         <variable
             name="viewModel"
             type="net.yan.kotlin.promoters.venda.VendaViewModel" />
@@ -53,26 +64,42 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/clientes"
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_prom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginRight="@dimen/margin_16dp"
-                    android:layout_marginLeft="@dimen/margin_16dp"
-                    android:text="Selecinar Cliente"/>
+                    android:textCursorDrawable="@null"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@null"
+                    android:layout_marginTop="25dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rec"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="@dimen/margin_16dp"
+            app:layout_anchor="@id/rec"
+            app:layout_anchorGravity="right|end|bottom"
+            app:srcCompat="@drawable/seta_24dp"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:onClick="@{() -> viewModel.tirarFoto()}"
             android:text="@string/extended_fab_label"
             app:icon="@drawable/ic_camera_alt_black_24dp"
             app:layout_anchor="@id/app_bar"
+            android:onClick="@{() -> viewModel.tirarFoto()}"
             app:layout_anchorGravity="bottom|right|end" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

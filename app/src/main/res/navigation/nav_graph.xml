@@ -60,9 +60,37 @@
         android:id="@+id/vendaFragment"
         android:name="net.yan.kotlin.promoters.venda.VendaFragment"
         android:label="fragment_venda"
-        tools:layout="@layout/fragment_venda" />
+        tools:layout="@layout/fragment_venda" >
+        <argument
+            android:name="cidade"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="cliente"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </fragment>
     <fragment
         android:id="@+id/optionOneFragment"
         android:name="net.yan.kotlin.promoters.venda.optionOne.OptionOneFragment"
-        android:label="OptionOneFragment" />
+        android:label="OptionOneFragment" >
+        <action
+            android:id="@+id/action_optionOneFragment_to_optionTwoFragment"
+            app:destination="@id/optionTwoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/optionTwoFragment"
+        android:name="net.yan.kotlin.promoters.venda.optionTwo.OptionTwoFragment"
+        android:label="OptionTwoFragment" >
+        <argument
+            android:name="cliente"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/action_optionTwoFragment_to_vendaFragment"
+            app:destination="@id/vendaFragment" />
+    </fragment>
 </navigation>

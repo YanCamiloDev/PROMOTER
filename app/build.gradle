@@ -55,7 +55,9 @@ dependencies {
     /*Dependências para abas*/
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
-    implementation 'com.android.support:recyclerview-selection:28.0.0'
+
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+
 
     /*Dependência para arredondamento de imagens*/
     implementation 'de.hdodenhof:circleimageview:3.1.0'
