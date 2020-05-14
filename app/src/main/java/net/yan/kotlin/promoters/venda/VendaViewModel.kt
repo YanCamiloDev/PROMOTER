@@ -10,12 +10,18 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import net.yan.kotlin.promoters.data.FirebaseHelper
 import net.yan.kotlin.promoters.model.PromPontos
 import net.yan.kotlin.promoters.model.Promoter
 import net.yan.kotlin.promoters.model.Venda
 import java.io.ByteArrayOutputStream
+import java.security.Timestamp
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class VendaViewModel(val resouces: Resources, val dataSource: FirebaseHelper) : ViewModel() {
@@ -24,51 +30,43 @@ class VendaViewModel(val resouces: Resources, val dataSource: FirebaseHelper) : 
     val coroutine = CoroutineScope(Dispatchers.IO + job)
     val lista = MutableLiveData<Array<Promoter>>()
     val foto = MutableLiveData<Boolean>()
-    val listaTemp = mutableListOf<Promoter>()
-
-
-    init {
-        coroutine.launch {
-            try {
-                val ref = dataSource.database!!.child("Promoter")
-                ref.addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-
-                    }
-
-                    override fun onDataChange(p0: DataSnapshot) {
-                        for (dados in p0.children) {
-                            val data = dados.getValue(Promoter::class.java)
-                            data?.id = dados.key.toString()
-                            listaTemp.add(data!!)
-                        }
-                        lista.value = listaTemp.toTypedArray()
-                    }
-
-                })
-            } catch (e: FirebaseException) {
-                Log.i("ERRO", e.message)
-            }
-        }
-    }
+    val verifica =  MutableLiveData<Boolean>()
+    val isFim = MutableLiveData<Boolean>()
 
     fun tirarFoto() {
         foto.value = true
     }
 
-    fun onFire(cidade: String, cliente: String, promoter: Promoter, foto: Bitmap) {
+    fun alert(){
+        verifica!!.value = true
+    }
+    fun alertExit(){
+        verifica!!.value = false
+    }
+
+    fun exit(){
+        isFim.value = false
+    }
+
+    fun onFire(pontos: PromPontos) {
         coroutine.launch {
             try {
                 val prom = PromPontos()
-                prom.fk_id_cidade = cidade
-                prom.fk_id_pontos = cliente
-                prom.data = Date().time
+                val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                val date = Date()
+                val strDate: String = dateFormat.format(date).toString()
+                prom.fk_id_promoter = dataSource.auth!!.currentUser!!.uid
+                prom.fk_id_cidade = pontos.fk_id_cidade
+                prom.fk_id_pontos = pontos.fk_id_pontos
+                prom.data = strDate
+                prom.foto = pontos.foto
                 val ref =
-                    dataSource.database!!.child("Promoter_Ponto").push().child(promoter.id)
+                    dataSource.database!!.child("Promoter_Ponto").push().child(prom.fk_id_promoter)
                         .setValue(prom)
                 ref.addOnCompleteListener {
+                    alertExit()
                     if (it.isSuccessful) {
-
+                        isFim.value = true
                     }
                 }
             } catch (e: FirebaseException) {
@@ -78,14 +76,15 @@ class VendaViewModel(val resouces: Resources, val dataSource: FirebaseHelper) : 
     }
 
 
-    fun gravarFoto(venda: Venda, imageBitmap: Bitmap) {
+    fun gravarFoto(cidade: String, cliente: String,  imageBitmap: Bitmap) {
+        alert()
         coroutine.launch {
             try {
+                val nomeImagem = UUID.randomUUID().toString()
                 val storageRef =
                     FirebaseStorage.getInstance().reference.child("imagens").child("vendas").child(
-                        "${venda.fk_id_prom_pontos}.jpeg"
+                        "${nomeImagem}.jpeg"
                     )
-
                 val baos = ByteArrayOutputStream()
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos)
                 val data = baos.toByteArray()
@@ -94,11 +93,14 @@ class VendaViewModel(val resouces: Resources, val dataSource: FirebaseHelper) : 
                 uploadTask.addOnFailureListener {
                     Log.i("FALHOU", it.message)
                 }.addOnSuccessListener {
-                    val vendaa = venda
                     val dow = storageRef.downloadUrl
                     dow.addOnSuccessListener {
-                        vendaa.foto = it.toString()
-                        salvarNoBanco(venda)
+                        val link = it.toString()
+                        val p = PromPontos()
+                        p.foto = link
+                        p.fk_id_pontos = cliente
+                        p.fk_id_cidade = cidade
+                        onFire(p)
                     }
                 }
             } catch (e: FirebaseException) {
@@ -107,20 +109,6 @@ class VendaViewModel(val resouces: Resources, val dataSource: FirebaseHelper) : 
         }
     }
 
-    fun salvarNoBanco(venda: Venda) {
-        coroutine.launch {
-            try {
-                val ref = dataSource.database!!.child("Promoter").push().setValue(venda)
-                ref.addOnCompleteListener {
-                    if (it.isSuccessful) {
-
-                    }
-                }
-            } catch (e: FirebaseException) {
-                Log.i("Erro", "SALVAR NO BANCO")
-            }
-        }
-    }
 
     fun tirarFotoClose() {
         foto.value = false

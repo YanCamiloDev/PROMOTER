@@ -1,6 +1,8 @@
 package net.yan.kotlin.promoters.model
 
 import com.google.firebase.database.Exclude
+import java.security.Timestamp
+import java.util.*
 
 
 class PromPontos{
@@ -10,13 +12,14 @@ class PromPontos{
         get() = field
 
     var fk_id_promoter: String = ""
-        @Exclude
         get() = field
 
     var fk_id_pontos: String = ""
         get() = field
     var fk_id_cidade: String = ""
         get() = field
-    var data: Long? = null
+    var data: String? = null
+        get() = field
+    var foto: String? = null
         get() = field
 }

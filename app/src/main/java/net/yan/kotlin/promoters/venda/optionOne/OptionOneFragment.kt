@@ -54,7 +54,7 @@ class OptionOneFragment : Fragment() {
 
         viewModel.nome.observe(viewLifecycleOwner, Observer {
             if (it != null){
-                findNavController().navigate(OptionOneFragmentDirections.actionOptionOneFragmentToOptionTwoFragment(it.id))
+                findNavController().navigate(OptionOneFragmentDirections.actionOptionOneFragmentToOptionTwoFragment(it.id, it.endereco))
                 viewModel.selecionarNomeExit()
             }
 

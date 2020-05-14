@@ -41,7 +41,7 @@ class OptionTwoFragment : Fragment() {
         })
         viewModel.cidade.observe(viewLifecycleOwner, Observer {
             if (it != null){
-                findNavController().navigate(OptionTwoFragmentDirections.actionOptionTwoFragmentToVendaFragment(it.id, argments.cliente))
+                findNavController().navigate(OptionTwoFragmentDirections.actionOptionTwoFragmentToVendaFragment(cidade = it.id, cliente = argments.cliente, cidadeNome = it.local, clienteNome = argments.clienteNome))
                 viewModel.selecionarNomeExit()
             }
         })

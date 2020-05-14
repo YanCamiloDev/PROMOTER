@@ -10,6 +10,7 @@
             type="net.yan.kotlin.promoters.principal.HomeViewModel" />
     </data>
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
@@ -186,7 +187,7 @@
             app:layout_anchor="@id/bar"
             android:clickable="true"
             android:onClick="@{() -> viewModel.addLocalAndVenda()}"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            app:srcCompat="@drawable/ic_camera_alt_black_24dp" />
 
 
         <FrameLayout
@@ -204,6 +205,13 @@
                 android:layout_height="wrap_content"
                 app:menu="@menu/demo_primary" />
         </FrameLayout>
+        <ViewStub
+            android:id="@+id/stub_import"
+            android:inflatedId="@+id/panel_import"
+            android:layout="@layout/fragment_loading"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -71,6 +71,19 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="null" />
+        <argument
+            android:name="cidadeNome"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="clienteNome"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/action_vendaFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/optionOneFragment"
@@ -92,5 +105,10 @@
         <action
             android:id="@+id/action_optionTwoFragment_to_vendaFragment"
             app:destination="@id/vendaFragment" />
+        <argument
+            android:name="clienteNome"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
     </fragment>
 </navigation>

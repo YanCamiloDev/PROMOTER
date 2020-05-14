@@ -4,105 +4,138 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="cidade"
+            name="cidadeNome"
             type="String" />
+
         <variable
-            name="cliente"
+            name="clienteNome"
             type="String" />
-        <variable
-            name="promotor"
-            type="net.yan.kotlin.promoters.model.Promoter" />
         <variable
             name="foto"
             type="android.graphics.Bitmap" />
+
+
         <variable
             name="viewModel"
             type="net.yan.kotlin.promoters.venda.VendaViewModel" />
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="235dp"
-            android:background="@drawable/promo2"
-            android:fitsSystemWindows="true">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:collapsedTitleTextAppearance="?attr/textAppearanceHeadline6"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleGravity="bottom"
-                app:expandedTitleMarginBottom="56dp"
-                app:expandedTitleMarginStart="16dp"
-                app:expandedTitleTextAppearance="?attr/textAppearanceHeadline5"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
+                    app:titleTextColor="#fff"
+                    app:title="Salvar registro"
                     app:navigationIcon="@drawable/close" />
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="148dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/search_prom"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/im"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:scaleType="centerCrop"
+                    android:onClick="@{() -> viewModel.tirarFoto()}"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/cat_card_rich_media_image_view_description"
+                    app:backgroundTint="@color/material_on_surface_emphasis_medium"
+                    app:backgroundTintMode="add"
+                    />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textCursorDrawable="@null"
-                    app:iconifiedByDefault="false"
-                    app:queryBackground="@null"
-                    android:layout_marginTop="25dp"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rec"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    android:padding="@dimen/cat_card_double_spacing"
+                    android:paddingBottom="@dimen/cat_card_single_spacing">
+
+                    <TextView
+                        style="?attr/textAppearanceHeadline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/cat_card_double_spacing"
+                        android:layout_marginBottom="@dimen/cat_card_single_spacing"
+                        android:text="Cidade e Cliente" />
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{clienteNome}" />
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{cidadeNome}" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/cat_card_triple_spacing"
+                    android:layout_marginBottom="@dimen/cat_card_single_spacing"
+                    android:background="?attr/dividerHorizontal" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/cadastrar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_margin="@dimen/margim_8dp"
+                        android:text="Cadastrar" />
 
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/transparent"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/colorPrimary"
+            />
 
-        </androidx.core.widget.NestedScrollView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_margin="@dimen/margin_16dp"
-            app:layout_anchor="@id/rec"
-            app:layout_anchorGravity="right|end|bottom"
-            app:srcCompat="@drawable/seta_24dp"/>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/extended_fab_label"
-            app:icon="@drawable/ic_camera_alt_black_24dp"
-            app:layout_anchor="@id/app_bar"
-            android:onClick="@{() -> viewModel.tirarFoto()}"
-            app:layout_anchorGravity="bottom|right|end" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
 
 </layout>

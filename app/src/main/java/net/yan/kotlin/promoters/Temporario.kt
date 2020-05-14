@@ -65,3 +65,85 @@ package net.yan.kotlin.promoters
     }
 
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+<androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_prom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textCursorDrawable="@null"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@null"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rec"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+
+
+
+
+        selectionTracker = SelectionTracker.Builder<Long>(
+            "mySelection",
+            binding.rec,
+            AdapterVenda.KeyProvider(adapter),
+            AdapterVenda.DetailsLookup(binding.rec),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            object : SelectionPredicate<Long>() {
+                override fun canSetStateForKey(
+                    key: Long,
+                    nextState: Boolean
+                ): Boolean {
+                    return true
+                }
+                override fun canSetStateAtPosition(
+                    position: Int,
+                    nextState: Boolean
+                ): Boolean {
+                    return true
+                }
+                override fun canSelectMultiple(): Boolean {
+                    return false // Set to false to allow single selecting
+                }
+            }
+        ).build()
+        adapter.setSelection(selectionTracker)
+
+        selectionTracker!!.addObserver(
+            object : SelectionTracker.SelectionObserver<Long?>() {
+                override fun onItemStateChanged(key: Long, selected: Boolean) {
+                    super.onItemStateChanged(key, selected)
+                    if (selected){
+                        selectPromotor = lista?.get(key.toInt())
+                        binding.promotor = selectPromotor
+                        binding.floating.show()
+                    }else{
+                        binding.promotor = null
+                        selectPromotor = null
+                        binding.floating.hide()
+                    }
+                }
+                override fun onSelectionChanged() {
+
+                }
+            })
+
+
+
+ */

@@ -1,6 +1,5 @@
 package net.yan.kotlin.promoters.model
 
-import java.util.*
 
 class Venda{
 
